@@ -11,3 +11,6 @@ __pycache__/
 *_flymake.*
 flycheck_*.el
 .\#*
+
+# VScode leftovers
+.vscode
