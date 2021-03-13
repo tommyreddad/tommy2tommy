@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Attention.
 
 This module contains functions and layers relevant to query-key-value
@@ -34,7 +33,8 @@ class SplitHeads(tf.keras.layers.Layer):
 
         """
         shape = tf.shape(inputs)
-        new_shape = [shape[0], shape[1], self._num_heads, shape[2]//self._num_heads]
+        new_shape = [shape[0], shape[1],
+                     self._num_heads, shape[2]//self._num_heads]
         inputs = tf.reshape(inputs, new_shape)
         return tf.transpose(inputs, (0, 2, 1, 3))
 
@@ -154,20 +154,25 @@ class MultiheadAttention(tf.keras.layers.Layer):
 
     """
 
-    def __init__(self, d_model, num_heads, **kwargs):
+    def __init__(self, d_model, num_heads, scaled=True, **kwargs):
         super(MultiheadAttention, self).__init__(**kwargs)
 
         if d_model % num_heads != 0:
-            raise ValueError('Attention dimension should be divisible by the number of heads.')
+            raise ValueError(
+                'Attention dimension should be divisible by the number of heads.')
 
         # Set up the linear projection layers.
-        self._to_q = tf.keras.layers.Dense(d_model, use_bias=False, name="to_q")
-        self._to_k = tf.keras.layers.Dense(d_model, use_bias=False, name="to_k")
-        self._to_v = tf.keras.layers.Dense(d_model, use_bias=False, name="to_v")
+        self._to_q = tf.keras.layers.Dense(
+            d_model, use_bias=False, name="to_q")
+        self._to_k = tf.keras.layers.Dense(
+            d_model, use_bias=False, name="to_k")
+        self._to_v = tf.keras.layers.Dense(
+            d_model, use_bias=False, name="to_v")
         self._to_out = tf.keras.layers.Dense(d_model, name="to_out")
 
         # Set up the attention layers.
-        self._dot_product_attention = DotProductAttention(scaled=True, name="dot_product_attention")
+        self._dot_product_attention = DotProductAttention(
+            scaled=scaled, name="dot_product_attention")
         self._split_heads = SplitHeads(num_heads, name="split_heads")
         self._merge_heads = MergeHeads(name="merge_heads")
 

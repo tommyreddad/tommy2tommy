@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Transformer encoder layers.
 
 This module contains layers relevant to transformer encoders. For full

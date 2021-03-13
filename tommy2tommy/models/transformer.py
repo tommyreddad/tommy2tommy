@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Transformer models.
 
 This module contains different neural network models for transformers,

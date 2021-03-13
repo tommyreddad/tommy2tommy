@@ -21,24 +21,18 @@ def greedy_search(model_fn, prefix, length):
             produces a Tensor of logits with shape [batch_size,
             length, output_vocab_size] of future outputs conditioned
             on the currently decoded output.
-        prefix: a Tensor with shape [batch_size, prefix_length] or
-            [prefix_length] the prefix fed into the model before
-            beginning the search.
+        prefix: a Tensor with shape [batch_size, prefix_length], the
+            prefix fed into the model before beginning the search.
         length (int): the maximum length of output sequences.
 
     Returns:
-        A Tensor with shape [batch_size, length] or [length], the
-        greedily decoded output sequences.
+        A Tensor with shape [batch_size, length], the greedily decoded
+        output sequences.
 
     """
     shape = tf.shape(prefix)
-    if len(shape) == 1:
-        prefix = prefix[tf.newaxis, :]
-        batch_size = 1
-        prefix_length = shape[0]
-    else:
-        batch_size = shape[0]
-        prefix_length = shape[1]
+    batch_size = shape[0]
+    prefix_length = shape[1]
     curr_inputs = tf.zeros(shape=(batch_size, 1), dtype=tf.int32)
     for i in range(length):
         predictions = model_fn(curr_inputs, training=False)
@@ -52,8 +46,6 @@ def greedy_search(model_fn, prefix, length):
             prediction_id = prefix[:, i]
         prediction_id = prediction_id[..., tf.newaxis]
 
-        curr_inputs = tf.concat([curr_inputs, prediction_id], axis=-1)
+        curr_inputs = tf.concat([curr_inputs, prediction_id], -1)
     # Disregard the initial padding token.
-    if len(shape) == 1:
-        return curr_inputs[0][1:]
     return curr_inputs[:, 1:]

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Rectified Adam optimizer.
 
 Todo:
@@ -98,7 +97,8 @@ class RAdam(tf.keras.optimizers.Optimizer):
                          ((sma_infty - 4.0)*(sma_infty - 2.0)*sma_t))
 
         # Only perform rectification if the SMA length estimate is small.
-        var_t = tf.where(sma_t > sma_threshold, rect_t*m_hat_t/denom_t, m_hat_t)
+        var_t = tf.where(sma_t > sma_threshold, rect_t *
+                         m_hat_t/denom_t, m_hat_t)
         var_update = var.assign_sub(lr_t*var_t, use_locking=self._use_locking)
         return tf.group(var_update, m_t, v_t)
 

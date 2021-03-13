@@ -1,4 +1,4 @@
-# -*- coding: utf-8 -*-
+
 """Yogi optimizer.
 
 Todo:
@@ -89,15 +89,18 @@ class Yogi(tf.keras.optimizers.Optimizer):
         elif activation == "tanh":
             sign = tf.math.tanh(10.0*(grad_squared - v))
         elif activation == "hardtanh":
-            sign = tf.math.maximum(-1.0, tf.math.minimum(1.0, 10.0*(grad_squared - v)))
+            sign = tf.math.maximum(-1.0, tf.math.minimum(1.0,
+                                                         10.0*(grad_squared - v)))
         else:
-            raise NotImplementedError("Unknown activation in Yogi optimizer: {}".format(activation))
+            raise NotImplementedError(
+                "Unknown activation in Yogi optimizer: {}".format(activation))
         v_t = v + (1 - beta_2_t)*sign*grad_squared
         v_t = v.assign(v_t, use_locking=self._use_locking)
         denom_t = epsilon_t + tf.sqrt(v_t/(1.0 - beta_2_power))
 
         # Variable update.
-        var_update = var.assign_sub(lr_t*m_hat_t/denom_t, use_locking=self._use_locking)
+        var_update = var.assign_sub(
+            lr_t*m_hat_t/denom_t, use_locking=self._use_locking)
         return tf.group(var_update, m_t, v_t)
 
     def get_config(self):

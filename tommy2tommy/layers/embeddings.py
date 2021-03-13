@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Embeddings.
 
 This module contains embedding layers relevant to transformer models,
@@ -45,7 +44,7 @@ class PositionalEncoding(tf.keras.layers.Layer):
         sines = tf.math.sin(angles[:, 0::2])
         cosines = tf.math.cos(angles[:, 1::2])
 
-        encoding = tf.concat([sines, cosines], axis=-1)
+        encoding = tf.concat([sines, cosines], -1)
         self._encoding = encoding[tf.newaxis, ...]
 
     def call(self, inputs):

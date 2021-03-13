@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Activation functions.
 
 This module implements some alternative activation functions which are

@@ -1,4 +1,3 @@
-# -*- coding: utf-8 -*-
 """Bias layers for attention logits.
 
 This module implements layers which compute bias to be applied to
